@@ -80,7 +80,7 @@ def get_guessed_word(secret_word, letters_guessed):
         continue
       guessed_word.append(elem)
     return ''.join(guessed_word)
-print(get_guessed_word(secret_word='apple', letters_guessed=['e', 'i', 'k', 'p', 'r', 's']))
+# print(get_guessed_word(secret_word='apple', letters_guessed=['e', 'i', 'k', 'p', 'r', 's'])) # test function get_guessed_word
 
 
 def get_available_letters(letters_guessed):
@@ -89,9 +89,11 @@ def get_available_letters(letters_guessed):
     returns: string (of letters), comprised of letters that represents which letters have not
       yet been guessed.
     '''
-    # FILL IN YOUR CODE HERE AND DELETE "pass"
-    pass
-    
+    available_letters = list(string.ascii_lowercase)
+    for elem in letters_guessed:
+      available_letters.remove(elem)
+    return ''.join(available_letters)
+# print(get_available_letters(letters_guessed=['e', 'i', 'k', 'p', 'r', 's'])) test function get_available_letters
     
 
 def hangman(secret_word):
@@ -119,9 +121,26 @@ def hangman(secret_word):
     
     Follows the other limitations detailed in the problem write-up.
     '''
-    # FILL IN YOUR CODE HERE AND DELETE "pass"
-    pass
+    guess_left = 6  # int: numbers of guesses left.
+    letters_guessed = []  # list[string]: letters that have been guessed.
+    print('''Welcome to the game Hangman!
+    I am thinking of a word that is {0:d} letters long.
+    '''.format(len(secret_word)))
 
+    for i in range(guess_left):
+      print('''-------------
+      You have {0:d} guesses left.
+      Available letters: {1:s}'''.format(guess_left, get_available_letters(letters_guessed)))
+      user_input = str(input('Please guess a letter: ')).lower() # ask user to enter a letter
+      assert len(user_input) == 1 and user_input in get_available_letters(letters_guessed), 'Error, please enter a character in letters left'
+      letters_guessed.append(user_input) # append guessed letter to letters_guessed
+      guess_left -= 1 # increment guess_left
+      if user_input in secret_word: # show if user guessed right or not
+        print('Good guess:', get_guessed_word(secret_word, letters_guessed))
+      else: 
+        print('Oops! That letter is not in my word:', get_guessed_word(secret_word, letters_guessed))
+        #todo here
+    return None
 
 
 # When you've completed your hangman function, scroll down to the bottom
@@ -208,7 +227,7 @@ if __name__ == "__main__":
     # uncomment the following two lines.
     
     secret_word = choose_word(wordlist)
-    hangman(secret_word)
+    hangman('apple')
 
 ###############
     

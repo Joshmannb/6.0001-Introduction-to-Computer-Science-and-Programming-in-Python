@@ -1,5 +1,6 @@
-import string
-# print(string.ascii_lowercase)
-a = string.ascii_lowercase
-a = list(a)
-print(a)
+a = 'apple'
+b = list(a)
+b.append('s')
+c = ''.join(b)
+print(a in c)
+print(c)
