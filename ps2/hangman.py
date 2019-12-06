@@ -12,7 +12,7 @@
 import random
 import string
 
-WORDLIST_FILENAME = "words.txt"
+WORDLIST_FILENAME = "ps2/words.txt"
 
 
 def load_words():
@@ -60,9 +60,10 @@ def is_word_guessed(secret_word, letters_guessed):
     returns: boolean, True if all the letters of secret_word are in letters_guessed;
       False otherwise
     '''
-    # FILL IN YOUR CODE HERE AND DELETE "pass"
-    pass
-
+    for elem in secret_word:
+      if elem not in letters_guessed:
+        return False
+    return True
 
 
 def get_guessed_word(secret_word, letters_guessed):
@@ -72,9 +73,14 @@ def get_guessed_word(secret_word, letters_guessed):
     returns: string, comprised of letters, underscores (_), and spaces that represents
       which letters in secret_word have been guessed so far.
     '''
-    # FILL IN YOUR CODE HERE AND DELETE "pass"
-    pass
-
+    guessed_word = []
+    for elem in secret_word:
+      if elem not in letters_guessed:
+        guessed_word.append('_ ')
+        continue
+      guessed_word.append(elem)
+    return ''.join(guessed_word)
+print(get_guessed_word(secret_word='apple', letters_guessed=['e', 'i', 'k', 'p', 'r', 's']))
 
 
 def get_available_letters(letters_guessed):
