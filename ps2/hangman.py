@@ -91,7 +91,8 @@ def get_available_letters(letters_guessed):
     '''
     available_letters = list(string.ascii_lowercase)
     for elem in letters_guessed:
-      available_letters.remove(elem)
+      if elem in available_letters:
+        available_letters.remove(elem)
     return ''.join(available_letters)
 # print(get_available_letters(letters_guessed=['e', 'i', 'k', 'p', 'r', 's'])) test function get_available_letters
     
@@ -121,25 +122,50 @@ def hangman(secret_word):
     
     Follows the other limitations detailed in the problem write-up.
     '''
-    guess_left = 6  # int: numbers of guesses left.
-    letters_guessed = []  # list[string]: letters that have been guessed.
+    warnings_left = 3
+    guess_left = 6    # int: numbers of guesses left.
+    letters_guessed = []    # list[string]: letters that have been guessed.
+    vowels = ['a', 'e', 'i', 'o']   # list[string]: letters that are vowels.
     print('''Welcome to the game Hangman!
-    I am thinking of a word that is {0:d} letters long.
-    '''.format(len(secret_word)))
+    I am thinking of a word that is {0:d} letters long.'''.format(len(secret_word)))
 
-    for i in range(guess_left):
-      print('''-------------
+    while guess_left != 0:
+      print('''--------------------
       You have {0:d} guesses left.
       Available letters: {1:s}'''.format(guess_left, get_available_letters(letters_guessed)))
-      user_input = str(input('Please guess a letter: ')).lower() # ask user to enter a letter
-      assert len(user_input) == 1 and user_input in get_available_letters(letters_guessed), 'Error, please enter a character in letters left'
-      letters_guessed.append(user_input) # append guessed letter to letters_guessed
-      guess_left -= 1 # increment guess_left
-      if user_input in secret_word: # show if user guessed right or not
+      user_input = str(input('Please guess a letter: ')).lower()    # ask user to enter a letter
+
+
+      if len(user_input) != 1:    # check if user enters a single character
+        if warnings_left != 0:
+          warnings_left -= 1
+          print('''Oops! Seems you enter other than a single letter. Now you have {0:d} warnings left'''.format(warnings_left))
+          # user_input = str(input('Please guess a letter: ')).lower()    # ask user to enter a letter
+          continue
+      elif user_input not in string.ascii_lowercase:    # check if user enters other than a letter
+        if warnings_left != 0:
+          warnings_left -= 1
+          print('''Oops! Seems you entered an invalid letter. Now you have {0:d} warnings left'''.format(warnings_left))
+          # user_input = str(input('Please guess a letter: ')).lower()    # ask user to enter a letter
+          continue
+      elif user_input not in get_available_letters(letters_guessed):    # check if user enters a letter that has been entered before
+        if warnings_left != 0:
+          warnings_left -= 1
+          print('''Oops! Seems the letter you entered had beed chosen before. Now you have {0:d} warnings letft'''.format(warnings_left))
+          # user_input = str(input('Please guess a letter: ')).lower()    # ask user to enter a letter
+          continue
+
+
+      letters_guessed.append(user_input)    # append guessed letter to letters_guessed
+      if user_input in secret_word and user_input not in letters_guessed[:-1]:   # show if user guessed right or not
         print('Good guess:', get_guessed_word(secret_word, letters_guessed))
       else: 
+        guess_left -= 1
+        if user_input in vowels and not warnings_left == 0:
+          guess_left -= 1
         print('Oops! That letter is not in my word:', get_guessed_word(secret_word, letters_guessed))
-        #todo here
+      
+
     return None
 
 
