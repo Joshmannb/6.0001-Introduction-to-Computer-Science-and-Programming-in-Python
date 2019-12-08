@@ -1,2 +1,2 @@
-i = list(range(5))
-print(i[:2])
+a = set(list('apple'))
+print(len(a))

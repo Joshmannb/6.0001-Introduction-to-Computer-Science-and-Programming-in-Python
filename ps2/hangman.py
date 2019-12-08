@@ -159,10 +159,17 @@ def hangman(secret_word):
       letters_guessed.append(user_input)    # append guessed letter to letters_guessed
       if user_input in secret_word and user_input not in letters_guessed[:-1]:   # show if user guessed right or not
         print('Good guess:', get_guessed_word(secret_word, letters_guessed))
+        if get_guessed_word(secret_word, letters_guessed) == secret_word:
+          print('''Congratulations, you won!
+          Your total score for this game is:''', guess_left * len(set(secret_word)))
+          return None
       else: 
         guess_left -= 1
         if user_input in vowels and not warnings_left == 0:
           guess_left -= 1
+        if guess_left <= 0 and get_guessed_word(secret_word, letters_guessed) != secret_word:
+          print('Sorry, you ran out of guesses. The word was {0:s}'.format(secret_word))
+          return None
         print('Oops! That letter is not in my word:', get_guessed_word(secret_word, letters_guessed))
       
 
