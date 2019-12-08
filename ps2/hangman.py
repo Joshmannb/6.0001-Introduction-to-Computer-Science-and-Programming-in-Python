@@ -165,7 +165,7 @@ def hangman(secret_word):
           return None
       else: 
         guess_left -= 1
-        if user_input in vowels and not warnings_left == 0:
+        if user_input in vowels and user_input not in get_available_letters:
           guess_left -= 1
         if guess_left <= 0 and get_guessed_word(secret_word, letters_guessed) != secret_word:
           print('Sorry, you ran out of guesses. The word was {0:s}'.format(secret_word))
@@ -195,7 +195,7 @@ def match_with_gaps(my_word, other_word):
         _ , and my_word and other_word are of the same length;
         False otherwise: 
     '''
-    # FILL IN YOUR CODE HERE AND DELETE "pass"
+    
     pass
 
 
@@ -260,7 +260,7 @@ if __name__ == "__main__":
     # uncomment the following two lines.
     
     secret_word = choose_word(wordlist)
-    hangman('apple')
+    hangman('right')
 
 ###############
     
