@@ -23,7 +23,7 @@ SCRABBLE_LETTER_VALUES = {
 # Helper code
 # (you don't need to understand this helper code)
 
-WORDLIST_FILENAME = "words.txt"
+WORDLIST_FILENAME = "ps3/words.txt"
 
 def load_words():
     """
@@ -91,8 +91,15 @@ def get_word_score(word, n):
     n: int >= 0
     returns: int >= 0
     """
+    word = word.lower()
+    first_component = 0
+
+    for i in word:      # sum of first component, int.
+        first_component += SCRABBLE_LETTER_VALUES[i]
     
-    pass  # TO DO... Remove this line when you implement this function
+    second_component = max(7 * len(word) - 3 * (n - len(word)), 1)      # second component, int.
+
+    return first_component * second_component
 
 #
 # Make sure you understand how this function works and what it does!
@@ -114,7 +121,7 @@ def display_hand(hand):
         for j in range(hand[letter]):
              print(letter, end=' ')      # print all on the same line
     print()                              # print an empty line
-
+display_hand({'a':1, 'p':2, 'l':1, 'e':1})
 #
 # Make sure you understand how this function works and what it does!
 # You will need to modify this for Problem #4.
@@ -167,8 +174,18 @@ def update_hand(hand, word):
     hand: dictionary (string -> int)    
     returns: dictionary (string -> int)
     """
+    word = word.lower()
+    new_hand = hand.copy()      # create a copy of hand so that the original hand won't be changed
 
-    pass  # TO DO... Remove this line when you implement this function
+    for i in word:      # decrement if letter in new_hand is used
+        if i in hand:
+            new_hand[i] -= 1
+
+    for i in new_hand.copy():       # del entries in new_hand if it has zero or negetive value
+        if new_hand[i] <= 0:
+            del(new_hand[i])
+
+    return new_hand
 
 #
 # Problem #3: Test word validity
