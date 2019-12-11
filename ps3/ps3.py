@@ -11,9 +11,11 @@ import math
 import random
 import string
 
-VOWELS = 'aeiou*'
+
+VOWELS = 'aeiou'
 CONSONANTS = 'bcdfghjklmnpqrstvwxyz'
 HAND_SIZE = 7
+replay_flag = False
 
 SCRABBLE_LETTER_VALUES = {
     'a': 1, 'b': 3, 'c': 3, 'd': 2, 'e': 1, 'f': 4, 'g': 2, 'h': 4, 'i': 1, 'j': 8, 'k': 5, 'l': 1, 'm': 3, 'n': 1, 'o': 1, 'p': 3, 'q': 10, 'r': 1, 's': 1, 't': 1, 'u': 1, 'v': 4, 'w': 4, 'x': 8, 'y': 4, 'z': 10, '*': 0
@@ -297,7 +299,7 @@ def play_hand(hand, word_list):
         print('Current Hand:', end=' ')
         display_hand(hand)
         # 
-        if calculate_handlen(hand) == HAND_SIZE:        # At the beginning of a hand, ask if replay hand.
+        if calculate_handlen(hand) == HAND_SIZE and replay_flag == False:        # At the beginning of a hand, ask if replay hand.
             substitute_flag = input('Would you like to substitute a letter? Enter "yes" to substitute, otherwise "no": ').lower()       # ask if user want to substitute a letter
             if substitute_flag == 'yes':
                 replaced_letter = input('Which letter would you like to replace: ')
@@ -333,7 +335,7 @@ def play_hand(hand, word_list):
     else:
         print('Ran out of letters.', end=' ')
     # so tell user the total score
-    print('''Total score: {0:d} points'''.format(total_score))
+    print('''Total score for this hand: {0:d} points'''.format(total_score))
     print('----------')
     # Return the total score as result of function
     return total_score
@@ -414,28 +416,31 @@ def play_game(word_list):
 
     word_list: list of lowercase strings
     """
-    hand_number = int(input('Enter total number of hands: '))       # ask user to set total number of hands 
+    hand_number = int(input('Enter total number of hands: '))       # ask user to set total number of hands
     sum_score = 0       # keep track of total score over all hands
-    replay_flag = False     # flag to check if replay
+    hand_score = 0      # keep track of score of a hand
+    last_hand = {}
+    global replay_flag      # declare replay_flag is global variable so that it can't be mutated within the function
 
-    for i in range(hand_number):
+    while hand_number != 0:
 
-        if i > 0:       # ask user to replay last hand or not
+        if replay_flag == False and len(last_hand) != 0:       # ask user to replay last hand or not
             replay = input('Would you like to replay the hand? Enter "yes" to replay, otherwise "no": ').lower()
             if replay == 'yes':
-                hand = last_hand
-                replay_flag == True
-            else:
-                hand = deal_hand(HAND_SIZE)     # assign hand to user at the beginning of each iteration of hand
-                replay_flag = False
-        elif i == 0:
-            hand = deal_hand(HAND_SIZE)     # assign hand to user at the beginning of each iteration of hand
-
+                replay_flag = True      # set replay_flag to true if replayed during a game
+                hand = last_hand        # dealt hand is last hand
+                new_hand_score = play_hand(hand, word_list)     # assign new played hand score to new_hand_score and compare with original score later
+                sum_score -= hand_score     # sum_score minus score last played which make it like last hand haven't been played
+                sum_score += max(new_hand_score, hand_score)        # add the bigger score to sum_score
+                continue
+        
+        hand = deal_hand(HAND_SIZE)     # assign hand to user at the beginning of each iteration of hand
         last_hand = hand.copy()     # create last_hand to implement replay function
-        sum_score += play_hand(hand, word_list)     # sum of total score over every hand
+        hand_score = play_hand(hand, word_list)
+        sum_score += hand_score     # sum of total score over every hand
         hand_number -= 1        # decrement of number of hands left
 
-    print("play_game not implemented.") # TO DO... Remove this line when you implement this function
+    print("Total score over all hands: {0:d}".format(sum_score))
     
 
 
@@ -446,6 +451,4 @@ def play_game(word_list):
 #
 if __name__ == '__main__':
     word_list = load_words()
-    # print(is_valid_word('f*x', {'f': 1, 'j': 1, 'x': 1}, word_list))
-    
     play_game(word_list)
