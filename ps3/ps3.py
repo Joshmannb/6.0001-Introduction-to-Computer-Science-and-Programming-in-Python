@@ -14,8 +14,6 @@ import string
 VOWELS = 'aeiou*'
 CONSONANTS = 'bcdfghjklmnpqrstvwxyz'
 HAND_SIZE = 7
-replay_flag = False     # flag to check if replay
-
 
 SCRABBLE_LETTER_VALUES = {
     'a': 1, 'b': 3, 'c': 3, 'd': 2, 'e': 1, 'f': 4, 'g': 2, 'h': 4, 'i': 1, 'j': 8, 'k': 5, 'l': 1, 'm': 3, 'n': 1, 'o': 1, 'p': 3, 'q': 10, 'r': 1, 's': 1, 't': 1, 'u': 1, 'v': 4, 'w': 4, 'x': 8, 'y': 4, 'z': 10, '*': 0
@@ -299,12 +297,11 @@ def play_hand(hand, word_list):
         print('Current Hand:', end=' ')
         display_hand(hand)
         # 
-        if not replay_flag:
-            if calculate_handlen(hand) == HAND_SIZE:        # At the beginning of a hand, ask if replay hand.
-                substitute_flag = input('Would you like to substitute a letter? Enter "yes" to substitute, otherwise "no": ').lower()       # ask if user want to substitute a letter
-                if substitute_flag == 'yes':
-                    replaced_letter = input('Which letter would you like to replace: ')
-                    substitute_hand(hand, replaced_letter)
+        if calculate_handlen(hand) == HAND_SIZE:        # At the beginning of a hand, ask if replay hand.
+            substitute_flag = input('Would you like to substitute a letter? Enter "yes" to substitute, otherwise "no": ').lower()       # ask if user want to substitute a letter
+            if substitute_flag == 'yes':
+                replaced_letter = input('Which letter would you like to replace: ')
+                substitute_hand(hand, replaced_letter)
         # Ask user for input
         user_input = input('Enter word, or "!!" to indicate that you are finished: ')
         # If the input is two exclamation points:
@@ -419,6 +416,7 @@ def play_game(word_list):
     """
     hand_number = int(input('Enter total number of hands: '))       # ask user to set total number of hands 
     sum_score = 0       # keep track of total score over all hands
+    replay_flag = False     # flag to check if replay
 
     for i in range(hand_number):
 
