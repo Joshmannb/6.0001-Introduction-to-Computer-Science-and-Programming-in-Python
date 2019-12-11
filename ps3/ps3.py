@@ -447,4 +447,5 @@ def play_game(word_list):
 if __name__ == '__main__':
     word_list = load_words()
     # print(is_valid_word('f*x', {'f': 1, 'j': 1, 'x': 1}, word_list))
+    
     play_game(word_list)
