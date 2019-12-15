@@ -22,23 +22,40 @@ def get_permutations(sequence):
     Note: depending on your implementation, you may return the permutations in
     a different order than what is listed here.
     '''
-    if len(sequence) == 1:
+    if len(sequence) == 1:      # base case: when sequence is singleton, return sequence
         return sequence
-    else:
-        return []
+    else:       # recursive step: in each step, each element can be extended inserting new letter in every position
+        '''
+        recursive step: in each step, each element can be extended inserting new letter in every position
+        example: with element like 'ab', and a new letter 'c', the extended elements are 'cab', 'acb' and 'abc'. 'c' is inserted in the first, the second and the third place of 'ab'.
+        '''
+        new_sequence = []
+        for i in get_permutations(sequence[:-1]):       # the permutations of sequence without the last element
+            for j in range(len(i)+1):       # every element in permutations
+                new_sequence.append(i[:j] + sequence[-1] + i[j:])       # is extended with last element in sequence
 
-    pass #delete this line and replace with your code here
+        return new_sequence
+        
+
 
 if __name__ == '__main__':
-#    #EXAMPLE
-#    example_input = 'abc'
-#    print('Input:', example_input)
-#    print('Expected Output:', ['abc', 'acb', 'bac', 'bca', 'cab', 'cba'])
-#    print('Actual Output:', get_permutations(example_input))
-    
-#    # Put three example test cases here (for your sanity, limit your inputs
-#    to be three characters or fewer as you will have n! permutations for a 
-#    sequence of length n)
+    if set(['ab', 'ba']) == set(get_permutations('ab')):
+        print('-'*20)
+        print('SUCCESS: Permutation of "ab"')
+    else:
+        print('FAILURE: get_permutations() is wrong with input "ab"')
 
-    pass #delete this line and replace with your code here
+    if set(['abc', 'acb', 'bac', 'bca', 'cab', 'cba']) == set(get_permutations('abc')):
+        print('-'*20)
+        print('SUCCESS: Permutation of "abc"')
+    else:
+        print('FAILURE: get_permutations() is wrong with input "abc"')
+    
+
+    if set(['dabc', 'adbc', 'abdc', 'abcd', 'dacb', 'adcb', 'acdb', 'acbd', 'dbac', 'bdac', 'badc', 'bacd', 'dbca', 'bdca', 'bcda', 'bcad', \
+        'dcab', 'cdab', 'cadb', 'cabd', 'dcba', 'cdba', 'cbda', 'cbad']) == set(get_permutations('abcd')):
+        print('-'*20)
+        print('SUCCESS: Permutation of "abcd"')
+    else:
+        print('FAILURE: get_permutations() is wrong with input "abcd"')
 

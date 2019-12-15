@@ -57,7 +57,7 @@ def get_story_string():
 
 ### END HELPER CODE ###
 
-WORDLIST_FILENAME = 'words.txt'
+WORDLIST_FILENAME = 'ps4\words.txt'
 
 class Message(object):
     def __init__(self, text):
@@ -70,7 +70,8 @@ class Message(object):
             self.message_text (string, determined by input text)
             self.valid_words (list, determined using helper function load_words)
         '''
-        pass #delete this line and replace with your code here
+        self.message_text = text
+        self.valid_words = load_words(WORDLIST_FILENAME)
 
     def get_message_text(self):
         '''
@@ -78,7 +79,7 @@ class Message(object):
         
         Returns: self.message_text
         '''
-        pass #delete this line and replace with your code here
+        return self.message_text
 
     def get_valid_words(self):
         '''
@@ -87,7 +88,7 @@ class Message(object):
         
         Returns: a COPY of self.valid_words
         '''
-        pass #delete this line and replace with your code here
+        return self.valid_words[:]
 
     def build_shift_dict(self, shift):
         '''
@@ -103,7 +104,16 @@ class Message(object):
         Returns: a dictionary mapping a letter (string) to 
                  another letter (string). 
         '''
-        pass #delete this line and replace with your code here
+        values = []     # empty values of shift_dict
+        keys = string.ascii_letters     # keys of shift_dict
+
+        for i in range(len(keys)):      # for every element in keys, map it to element in values with displacement of shift
+            if i < 26:      # for lowercase letter
+                values.append(keys[(i + shift) % 26])
+            else:       # for uppercase letter
+                values.append(keys[(i + shift) % 26 + 26])
+
+        return dict(zip(keys, values))
 
     def apply_shift(self, shift):
         '''
@@ -117,7 +127,15 @@ class Message(object):
         Returns: the message text (string) in which every character is shifted
              down the alphabet by the input shift
         '''
-        pass #delete this line and replace with your code here
+        shifted_message = []        # list to store shifted message
+
+        for i in (self.message_text):       # for every element in self.mess_text
+            if i in string.ascii_letters:       # if it's letter, shift
+                shifted_message.append(self.build_shift_dict(shift)[i])
+            else:       # if not, keep it
+                shifted_message.append(i)
+                
+        return ''.join(shifted_message)
 
 class PlaintextMessage(Message):
     def __init__(self, text, shift):
@@ -135,7 +153,9 @@ class PlaintextMessage(Message):
             self.message_text_encrypted (string, created using shift)
 
         '''
-        pass #delete this line and replace with your code here
+        Message.__init__(self, text)
+        self.shift = shift
+        
 
     def get_shift(self):
         '''
