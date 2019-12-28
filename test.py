@@ -1,13 +1,4 @@
 
-class test(object):
-    def __init__(self, x):
-        self.x = x
-
-    def say(self):
-        print(self.x)
-
-class b(test):
-    pass
-
-c = b(5)
-c.say()
+a = {'1': 5, '2': 3}
+b = a.copy()
+print(b)
