@@ -1,6 +1,6 @@
-a = {'a': 1}
-a['b'] = 2
-for i in a.items():
+b = [1, 2, 'a', 'b']
+d = [True, True, False]
+c = map(type, b)
+for i in c:
     print(i)
-c = list(a.items())
 print(c)

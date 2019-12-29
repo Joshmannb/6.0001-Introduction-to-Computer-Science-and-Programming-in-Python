@@ -4,6 +4,7 @@
 # Time Spent: x:xx
 
 import string
+from functools import partial
 
 ### HELPER CODE ###
 def load_words(file_name):
@@ -153,10 +154,10 @@ class PlaintextMessage(Message):
             self.message_text_encrypted (string, created using shift)
 
         '''
-        super().__init__()
+        super().__init__(text)
         self.shift = shift
         self.encryption_dict = self.build_shift_dict(shift)
-        self.message_text_encrypted = self.apply_shift()
+        self.message_text_encrypted = self.apply_shift(shift)
 
     def get_shift(self):
         '''
@@ -206,7 +207,7 @@ class CiphertextMessage(Message):
             self.message_text (string, determined by input text)
             self.valid_words (list, determined using helper function load_words)
         '''
-        super().__init__()
+        super().__init__(text)
 
     def decrypt_message(self):
         '''
@@ -224,31 +225,37 @@ class CiphertextMessage(Message):
         Returns: a tuple of the best shift value used to decrypt the message
         and the decrypted message text using that shift value
         '''
-        valid_words_counter = {}        # dict to check how many words is valid after shift to each shift number
-        split_message_text = self.message_text.split()      # list of seperate words
+        valid_words_counter = []        # dict to check how many words is valid after shift to each shift number
+        max_value =  0
+        shift_value = 0
 
         for i in range(26):
-            reshifted_message_text = map(self.apply_shift(26-i), split_message_text)
-            valid_words_num = sum(map(is_word(self.valid_words), reshifted_message_text))
-            valid_words_counter[str(i)] = valid_words_num
+            reshifted_message_text = self.apply_shift(i)
+            valid_words_num = sum(map(partial(is_word, self.valid_words), reshifted_message_text.split()))
+            valid_words_counter.append(valid_words_num)
         
-        valid_words_counter = list(valid_words_counter.items())
-        for i in range(5):
-            pass
+        for idx, value in enumerate(valid_words_counter):
+            if value > max_value:
+                max_value = value
+                shift_value = idx
+            else:
+                pass
 
-        # todo: rewrite valid_words_counter with list, and complete ps4b
+
+        return shift_value, self.apply_shift(shift_value)
+        # TODO: comment!
 
 if __name__ == '__main__':
 
-#    #Example test case (PlaintextMessage)
-#    plaintext = PlaintextMessage('hello', 2)
-#    print('Expected Output: jgnnq')
-#    print('Actual Output:', plaintext.get_message_text_encrypted())
-#
-#    #Example test case (CiphertextMessage)
-#    ciphertext = CiphertextMessage('jgnnq')
-#    print('Expected Output:', (24, 'hello'))
-#    print('Actual Output:', ciphertext.decrypt_message())
+    #Example test case (PlaintextMessage)
+    plaintext = PlaintextMessage('hello', 2)
+    print('Expected Output: jgnnq')
+    print('Actual Output:', plaintext.get_message_text_encrypted())
+
+    #Example test case (CiphertextMessage)
+    ciphertext = CiphertextMessage('jgnnq')
+    print('Expected Output:', (24, 'hello'))
+    print('Actual Output:', ciphertext.decrypt_message())
 
     #TODO: WRITE YOUR TEST CASES HERE
 
