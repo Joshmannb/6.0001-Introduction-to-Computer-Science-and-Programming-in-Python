@@ -224,7 +224,19 @@ class CiphertextMessage(Message):
         Returns: a tuple of the best shift value used to decrypt the message
         and the decrypted message text using that shift value
         '''
-        pass #delete this line and replace with your code here
+        valid_words_counter = {}        # dict to check how many words is valid after shift to each shift number
+        split_message_text = self.message_text.split()      # list of seperate words
+
+        for i in range(26):
+            reshifted_message_text = map(self.apply_shift(26-i), split_message_text)
+            valid_words_num = sum(map(is_word(self.valid_words), reshifted_message_text))
+            valid_words_counter[str(i)] = valid_words_num
+        
+        valid_words_counter = list(valid_words_counter.items())
+        for i in range(5):
+            pass
+
+        # todo: rewrite valid_words_counter with list, and complete ps4b
 
 if __name__ == '__main__':
 
