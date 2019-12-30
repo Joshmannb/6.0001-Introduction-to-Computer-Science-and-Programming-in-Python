@@ -1,6 +1,2 @@
-b = [1, 2, 'a', 'b']
-d = [True, True, False]
-c = map(type, b)
-for i in c:
-    print(i)
-print(c)
+a = {'a': 1, 'b': 2, 'c': 3, 'd': 4}
+print('a' in a)

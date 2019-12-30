@@ -51,7 +51,7 @@ def get_story_string():
     """
     Returns: a story in encrypted text.
     """
-    f = open("story.txt", "r")
+    f = open("ps4\story.txt", "r")
     story = str(f.read())
     f.close()
     return story
@@ -226,15 +226,15 @@ class CiphertextMessage(Message):
         and the decrypted message text using that shift value
         '''
         valid_words_counter = []        # dict to check how many words is valid after shift to each shift number
-        max_value =  0
-        shift_value = 0
+        max_value =  0      # value of maximum valid words after reshift
+        shift_value = 0     # best shift value
 
-        for i in range(26):
-            reshifted_message_text = self.apply_shift(i)
-            valid_words_num = sum(map(partial(is_word, self.valid_words), reshifted_message_text.split()))
-            valid_words_counter.append(valid_words_num)
+        for i in range(26):     # iterate over the length of alphbet 
+            reshifted_message_text = self.apply_shift(i)        # apply shift 
+            valid_words_num = sum(map(partial(is_word, self.valid_words), reshifted_message_text.split()))      # calculate how many words are valid after shift
+            valid_words_counter.append(valid_words_num)     # store valid words number in list
         
-        for idx, value in enumerate(valid_words_counter):
+        for idx, value in enumerate(valid_words_counter):       # sort out best shift value
             if value > max_value:
                 max_value = value
                 shift_value = idx
@@ -243,7 +243,7 @@ class CiphertextMessage(Message):
 
 
         return shift_value, self.apply_shift(shift_value)
-        # TODO: comment!
+
 
 if __name__ == '__main__':
 
@@ -257,8 +257,6 @@ if __name__ == '__main__':
     print('Expected Output:', (24, 'hello'))
     print('Actual Output:', ciphertext.decrypt_message())
 
-    #TODO: WRITE YOUR TEST CASES HERE
+    story = CiphertextMessage(get_story_string())
+    print('Output:', story.decrypt_message())
 
-    #TODO: best shift value and unencrypted story 
-    
-    pass #delete this line and replace with your code here

@@ -38,24 +38,23 @@ def get_permutations(sequence):
         
 
 
-if __name__ == '__main__':
-    if set(['ab', 'ba']) == set(get_permutations('ab')):
-        print('-'*20)
-        print('SUCCESS: Permutation of "ab"')
-    else:
-        print('FAILURE: get_permutations() is wrong with input "ab"')
+# if __name__ == '__main__':
+#     if set(['ab', 'ba']) == set(get_permutations('ab')):
+#         print('-'*20)
+#         print('SUCCESS: Permutation of "ab"')
+#     else:
+#         print('FAILURE: get_permutations() is wrong with input "ab"')
 
-    if set(['abc', 'acb', 'bac', 'bca', 'cab', 'cba']) == set(get_permutations('abc')):
-        print('-'*20)
-        print('SUCCESS: Permutation of "abc"')
-    else:
-        print('FAILURE: get_permutations() is wrong with input "abc"')
+#     if set(['abc', 'acb', 'bac', 'bca', 'cab', 'cba']) == set(get_permutations('abc')):
+#         print('-'*20)
+#         print('SUCCESS: Permutation of "abc"')
+#     else:
+#         print('FAILURE: get_permutations() is wrong with input "abc"')
     
 
-    if set(['dabc', 'adbc', 'abdc', 'abcd', 'dacb', 'adcb', 'acdb', 'acbd', 'dbac', 'bdac', 'badc', 'bacd', 'dbca', 'bdca', 'bcda', 'bcad', \
-        'dcab', 'cdab', 'cadb', 'cabd', 'dcba', 'cdba', 'cbda', 'cbad']) == set(get_permutations('abcd')):
-        print('-'*20)
-        print('SUCCESS: Permutation of "abcd"')
-    else:
-        print('FAILURE: get_permutations() is wrong with input "abcd"')
-
+#     if set(['dabc', 'adbc', 'abdc', 'abcd', 'dacb', 'adcb', 'acdb', 'acbd', 'dbac', 'bdac', 'badc', 'bacd', 'dbca', 'bdca', 'bcda', 'bcad', \
+#         'dcab', 'cdab', 'cadb', 'cabd', 'dcba', 'cdba', 'cbda', 'cbad']) == set(get_permutations('abcd')):
+#         print('-'*20)
+#         print('SUCCESS: Permutation of "abcd"')
+#     else:
+#         print('FAILURE: get_permutations() is wrong with input "abcd"')
