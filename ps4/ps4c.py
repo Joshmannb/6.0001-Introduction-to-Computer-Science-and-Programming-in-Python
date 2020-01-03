@@ -167,30 +167,29 @@ class EncryptedSubMessage(SubMessage):
         
         Hint: use your function from Part 4A
         '''
-        vowels_permutation = get_permutations(VOWELS_LOWER)
-        valid_words_counter = []
-        max_value = 0
-        transpose_value = 0
+        vowels_permutation = get_permutations(VOWELS_LOWER)     # possible permutations of given vowels
+        valid_words_counter = []        # keep track of numbers of valid words of each decryption
+        max_value = 0       # keep track of max numbers of valid words of every decryption
+        transpose_value = 0     # used to know which decryption(permutation) generates max numbers of valid words
         
-        for i in vowels_permutation:
+        for i in vowels_permutation:        # decryption and keep track ...
             transpose_dict = dict(zip(i + i.upper(), VOWELS_LOWER + VOWELS_UPPER))
             valid_words_num = sum(map(partial(is_word, self.valid_words), self.apply_transpose(transpose_dict).split()))
             valid_words_counter.append(valid_words_num)
         
-        for idx, value in enumerate(valid_words_counter):
+        for idx, value in enumerate(valid_words_counter):       # determine max_value and tranpose_value
             if value >= max_value:
                 max_value = value
                 transpose_value = idx
             else:
                 pass
 
-        print(valid_words_counter[transpose_value])
-        if max_value == 0:
+        if max_value == 0:      # if none of the decryptions is good, return the original input text
             return self.message_text
         
         transpose_dict = dict(zip(vowels_permutation[transpose_value] + vowels_permutation[transpose_value].upper(), VOWELS_LOWER + VOWELS_UPPER))
 
-        return self.apply_transpose(transpose_dict)
+        return self.apply_transpose(transpose_dict)     # else, return decrypted text
     
 
 if __name__ == '__main__':
@@ -206,14 +205,11 @@ if __name__ == '__main__':
     print("Decrypted message:", enc_message.decrypt_message())
      
     # WRITE YOUR TEST CASES HERE
-    message = SubMessage('Is This For Real?')
+    message = SubMessage('Everyday is a good day!')
     permutation = 'aieuo'
-                # 'aeiou'
     enc_dict = message.build_transpose_dict(permutation)
     print('Original message:', message.get_message_text(), 'Permutation:', permutation)
-    print('Expected encryption:', 'E Luvi Yuo')
+    print('Expected encryption:', 'Iviryday es a guud day!')
     print('Actual encryption:', message.apply_transpose(enc_dict))
     enc_message = EncryptedSubMessage(message.apply_transpose(enc_dict))
     print('Decrypted message:', enc_message.decrypt_message())
-
-    #TODO: Debug and comment!
