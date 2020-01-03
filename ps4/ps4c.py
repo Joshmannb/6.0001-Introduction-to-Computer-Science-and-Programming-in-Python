@@ -206,7 +206,7 @@ if __name__ == '__main__':
     print("Decrypted message:", enc_message.decrypt_message())
      
     # WRITE YOUR TEST CASES HERE
-    message = SubMessage('Is This For Real?')
+    message = SubMessage('Everyday is a good day!')
     permutation = 'aieuo'
                 # 'aeiou'
     enc_dict = message.build_transpose_dict(permutation)
