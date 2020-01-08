@@ -1,4 +1,4 @@
-list = [2.9715, 1.1434, 0.7667, 0.5154]
+list = [1030.8, 574.4, 67.7, 19.2, 14.3, 6.0, 2.5, 1.9, 0.6, 0.5]
 sum_eigen = sum(list)
 sum_ith = 0
 for i in range(len(list)):
