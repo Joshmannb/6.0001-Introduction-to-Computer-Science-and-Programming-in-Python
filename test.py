@@ -6,3 +6,4 @@ for i in range(len(list)):
     ratio = sum_ith/sum_eigen
     print('sum to {0:d}th eigenvalues over sum of all eigenvalues:'.format(i+1), ratio)
     
+print('test')
