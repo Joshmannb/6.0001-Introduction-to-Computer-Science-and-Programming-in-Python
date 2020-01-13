@@ -98,29 +98,29 @@ class Trigger(object):
 class PharseTrigger(Trigger):
     def __init__(self, phrase):
         super().__init__()
-        self.phrase = phrase.lower().strip(string.punctuation)
+        self.phrase = phrase.lower().strip(string.punctuation)      # format phrase
 
     def evaluate(self, story):
-        story = story.lower()
+        story = story.lower()       # format story
 
-        for i in string.punctuation:
+        for i in string.punctuation:        # replace punctuation with space
             story = story.replace(i, ' ')
         
-        story = story.split()
-        words_valid_check = True
+        story = story.split()       # string to list of words
+        words_valid_check = True        # check if every word in phrase is in story list or not
 
-        for i in self.phrase.split():
+        for i in self.phrase.split():       
             if i in story:
                 continue
             else:
                 words_valid_check = False
                 break
         
-        story = ' '.join(story)
+        story = ' '.join(story)     # formatted string of story
 
-        if self.phrase in story and words_valid_check:
+        if self.phrase in story and words_valid_check:      # if words in phrase are all valid and are consecutive, trigger
             return True
-        else:
+        else:       # else, don't trigger
             return False
 
 # Problem 3
