@@ -1,9 +1,49 @@
-list = [1030.8, 574.4, 67.7, 19.2, 14.3, 6.0, 2.5, 1.9, 0.6, 0.5]
-sum_eigen = sum(list)
-sum_ith = 0
-for i in range(len(list)):
-    sum_ith += list[i]
-    ratio = sum_ith/sum_eigen
-    print('sum to {0:d}th eigenvalues over sum of all eigenvalues:'.format(i+1), ratio)
-    
-print('test')
+import string
+a = 'purple co?@!#w'
+b = 'this is a purple%#$%@%%cow'
+for i in string.punctuation:
+    (a, b) = (a.replace(i, ''), b.replace(i, ' '))
+print(string.punctuation)
+
+class Trigger(object):
+    def evaluate(self, story):
+        """
+        Returns True if an alert should be generated
+        for the given news item, or False otherwise.
+        """
+        # DO NOT CHANGE THIS!
+        raise NotImplementedError
+
+# PHRASE TRIGGERS
+
+# Problem 2
+class PharseTrigger(Trigger):
+    def __init__(self, phrase):
+        super().__init__()
+        self.phrase = phrase.lower().strip(string.punctuation)
+
+    def evaluate(self, story):
+        story = story.lower()
+
+        for i in string.punctuation:
+            story = story.replace(i, ' ')
+        
+        story = story.split()
+        words_valid_check = True
+
+        for i in self.phrase.split():
+            if i in story:
+                continue
+            else:
+                words_valid_check = False
+                break
+        
+        story = ' '.join(story)
+
+        if self.phrase in story and words_valid_check:
+            return True
+        else:
+            return False
+
+a = PharseTrigger('purple cow')
+print(a.evaluate('purple@#$%cows'))
