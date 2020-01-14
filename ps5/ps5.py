@@ -39,7 +39,7 @@ def process(url):
         try:
             pubdate = datetime.strptime(pubdate, "%a, %d %b %Y %H:%M:%S %Z")
             pubdate.replace(tzinfo=pytz.timezone("GMT"))
-          #  pubdate = pubdate.astimezone(pytz.timezone('EST'))
+            pubdate = pubdate.astimezone(pytz.timezone('EST'))
           #  pubdate.replace(tzinfo=None)
         except ValueError:
             pubdate = datetime.strptime(pubdate, "%a, %d %b %Y %H:%M:%S %z")
@@ -85,7 +85,7 @@ class NewsStory(object):
 
 class Trigger(object):
     def evaluate(self, story):
-        """
+        """     
         Returns True if an alert should be generated
         for the given news item, or False otherwise.
         """
@@ -101,45 +101,82 @@ class PharseTrigger(Trigger):
         self.phrase = phrase.lower().strip(string.punctuation)      # format phrase
 
     def evaluate(self, story):
-        story = story.lower()       # format story
+        return super().evaluate(story)
+
+    def is_phrase_in(self, text):
+        text = text.lower()       # format text
 
         for i in string.punctuation:        # replace punctuation with space
-            story = story.replace(i, ' ')
+            text = text.replace(i, ' ')
         
-        story = story.split()       # string to list of words
-        words_valid_check = True        # check if every word in phrase is in story list or not
+        text = text.split()       # string to list of words
+        words_valid_check = True        # check if every word in phrase is in text list or not
 
         for i in self.phrase.split():       
-            if i in story:
+            if i in text:
                 continue
             else:
                 words_valid_check = False
                 break
-        
-        story = ' '.join(story)     # formatted string of story
 
-        if self.phrase in story and words_valid_check:      # if words in phrase are all valid and are consecutive, trigger
+        text = ' '.join(text)     # formatted string of text
+
+        if self.phrase in text and words_valid_check:      # if words in phrase are all valid and are consecutive, trigger
             return True
         else:       # else, don't trigger
             return False
 
 # Problem 3
-# TODO: TitleTrigger
+class TitleTrigger(PharseTrigger):
+    def __init__(self, phrase):
+        super().__init__(phrase)
+
+    def evaluate(self, story):      # substitute evalute function
+        title = story.get_title()       # get title of the NewsStory instance
+        return super().is_phrase_in(title)      # check if self.phrase is in title
 
 # Problem 4
-# TODO: DescriptionTrigger
+class DescriptionTrigger(PharseTrigger):
+    def __init__(self, phrase):
+        super().__init__(phrase)
+
+    def evaluate(self, story):
+        description = story.get_description()
+        return  super().is_phrase_in(description)
 
 # TIME TRIGGERS
 
 # Problem 5
-# TODO: TimeTrigger
-# Constructor:
-#        Input: Time has to be in EST and in the format of "%d %b %Y %H:%M:%S".
-#        Convert time from string to a datetime before saving it as an attribute.
+class TimeTrigger(Trigger):
+    def __init__(self, triggertime):
+        super().__init__()
+        self.triggertime = datetime.strptime(triggertime, "%a, %d %b %Y %H:%M:%S %Z")
+        self.triggertime = triggertime.replace(tzinfo=pytz.timezone("EST"))
 
 # Problem 6
-# TODO: BeforeTrigger and AfterTrigger
+# TODO: read https://docs.python.org/3.5/library/datetime.html# and correct problem 6
+class BeforeTrigger(TimeTrigger):
+    def __init__(self, triggertime):
+        super().__init__(triggertime)
 
+    def evaluate(self, story):
+        pubdate = story.get_pubdate()
+        print(self.triggertime.tzinfo, '\n', pubdate.tzinfo)
+        if self.triggertime < pubdate:
+            return True
+        else:
+            return False
+
+class AfterTrigger(TimeTrigger):
+    def __init__(self, triggertime):
+        super().__init__(triggertime)
+
+    def evaluate(self, story):
+        pubdate = story.get_pubdate()
+        if self.triggertime > pubdate:
+            return True
+        else:
+            return False
 
 # COMPOSITE TRIGGERS
 
