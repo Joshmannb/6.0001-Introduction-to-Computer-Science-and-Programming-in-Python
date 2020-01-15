@@ -39,8 +39,8 @@ def process(url):
         try:
             pubdate = datetime.strptime(pubdate, "%a, %d %b %Y %H:%M:%S %Z")
             pubdate.replace(tzinfo=pytz.timezone("GMT"))
-            pubdate = pubdate.astimezone(pytz.timezone('EST'))
-          #  pubdate.replace(tzinfo=None)
+            # pubdate = pubdate.astimezone(pytz.timezone('Asia/Taipei'))
+            # pubdate.replace(tzinfo=None)
         except ValueError:
             pubdate = datetime.strptime(pubdate, "%a, %d %b %Y %H:%M:%S %z")
 
@@ -150,8 +150,7 @@ class DescriptionTrigger(PharseTrigger):
 class TimeTrigger(Trigger):
     def __init__(self, triggertime):
         super().__init__()
-        self.triggertime = datetime.strptime(triggertime, "%a, %d %b %Y %H:%M:%S %Z")
-        self.triggertime = triggertime.replace(tzinfo=pytz.timezone("EST"))
+        self.triggertime = datetime.strptime(triggertime, "%d %b %Y %H:%M:%S").replace(tzinfo=pytz.timezone('EST'))
 
 # Problem 6
 # TODO: read https://docs.python.org/3.5/library/datetime.html# and correct problem 6
@@ -161,11 +160,9 @@ class BeforeTrigger(TimeTrigger):
 
     def evaluate(self, story):
         pubdate = story.get_pubdate()
-        print(self.triggertime.tzinfo, '\n', pubdate.tzinfo)
-        if self.triggertime < pubdate:
-            return True
-        else:
-            return False
+        if pubdate.tzinfo == None:
+            pubdate = pubdate.replace(tzinfo=pytz.timezone('EST'))
+        return self.triggertime > pubdate
 
 class AfterTrigger(TimeTrigger):
     def __init__(self, triggertime):
@@ -173,10 +170,9 @@ class AfterTrigger(TimeTrigger):
 
     def evaluate(self, story):
         pubdate = story.get_pubdate()
-        if self.triggertime > pubdate:
-            return True
-        else:
-            return False
+        if pubdate.tzinfo == None:
+            pubdate = pubdate.replace(tzinfo=pytz.timezone('EST'))
+        return self.triggertime < pubdate
 
 # COMPOSITE TRIGGERS
 
