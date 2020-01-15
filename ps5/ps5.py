@@ -140,7 +140,7 @@ class DescriptionTrigger(PharseTrigger):
     def __init__(self, phrase):
         super().__init__(phrase)
 
-    def evaluate(self, story):
+    def evaluate(self, story):      # similar to TitleTrigger's evaluate function
         description = story.get_description()
         return  super().is_phrase_in(description)
 
@@ -150,25 +150,25 @@ class DescriptionTrigger(PharseTrigger):
 class TimeTrigger(Trigger):
     def __init__(self, triggertime):
         super().__init__()
-        self.triggertime = datetime.strptime(triggertime, "%d %b %Y %H:%M:%S").replace(tzinfo=pytz.timezone('EST'))
+        self.triggertime = datetime.strptime(triggertime, "%d %b %Y %H:%M:%S").replace(tzinfo=pytz.timezone('EST'))     # string to datetime and add timezone info
 
 # Problem 6
 # TODO: read https://docs.python.org/3.5/library/datetime.html# and correct problem 6
 class BeforeTrigger(TimeTrigger):
-    def __init__(self, triggertime):
+    def __init__(self, triggertime):        # TimeTrigger's constructor
         super().__init__(triggertime)
 
     def evaluate(self, story):
-        pubdate = story.get_pubdate()
-        if pubdate.tzinfo == None:
-            pubdate = pubdate.replace(tzinfo=pytz.timezone('EST'))
-        return self.triggertime > pubdate
+        pubdate = story.get_pubdate()       # get pubdate from NewsStory instance
+        if pubdate.tzinfo == None:      # if pubdate doesn't have timezone attribute
+            pubdate = pubdate.replace(tzinfo=pytz.timezone('EST'))      # set it to EST
+        return self.triggertime > pubdate       # if pubdate is befoer self.triggertime, triggers
 
 class AfterTrigger(TimeTrigger):
-    def __init__(self, triggertime):
+    def __init__(self, triggertime):        # TimeTrigger's constructor
         super().__init__(triggertime)
 
-    def evaluate(self, story):
+    def evaluate(self, story):      # similar to BeforeTrigger's evaluate fucntion
         pubdate = story.get_pubdate()
         if pubdate.tzinfo == None:
             pubdate = pubdate.replace(tzinfo=pytz.timezone('EST'))
