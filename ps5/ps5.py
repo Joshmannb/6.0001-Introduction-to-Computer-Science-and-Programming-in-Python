@@ -162,7 +162,7 @@ class BeforeTrigger(TimeTrigger):
         pubdate = story.get_pubdate()       # get pubdate from NewsStory instance
         if pubdate.tzinfo == None:      # if pubdate doesn't have timezone attribute
             pubdate = pubdate.replace(tzinfo=pytz.timezone('EST'))      # set it to EST
-        return self.triggertime > pubdate       # if pubdate is befoer self.triggertime, triggers
+        return pubdate < self.triggertime       # if pubdate is befoer self.triggertime, triggers
 
 class AfterTrigger(TimeTrigger):
     def __init__(self, triggertime):        # TimeTrigger's constructor
@@ -172,18 +172,38 @@ class AfterTrigger(TimeTrigger):
         pubdate = story.get_pubdate()
         if pubdate.tzinfo == None:
             pubdate = pubdate.replace(tzinfo=pytz.timezone('EST'))
-        return self.triggertime < pubdate
+        return pubdate > self.triggertime
 
 # COMPOSITE TRIGGERS
 
 # Problem 7
-# TODO: NotTrigger
+class NotTrigger(Trigger):
+    def __init__(self, trigger):        # NotTrigger takes a trigger as an input
+        super().__init__()
+        self.trigger = trigger
+
+    def evaluate(self, story):      # and reverse its evaluate function's result
+        return not self.trigger.evaluate(story)
 
 # Problem 8
-# TODO: AndTrigger
+class AndTrigger(Trigger):
+    def __init__(self, trigger_1, trigger_2):       # AndTrigger takes two triggers as inputs
+        super().__init__()
+        self.trigger_1 = trigger_1
+        self.trigger_2 = trigger_2
+    
+    def evaluate(self, story):      # and fires when two input triggers fire
+        return self.trigger_1.evaluate(story) and self.trigger_2.evaluate(story)
 
 # Problem 9
-# TODO: OrTrigger
+class OrTrigger(Trigger):       # OrTrigger takes two triggers as inputs
+    def __init__(self, trigger_1, trigger_2):
+        super().__init__()
+        self.trigger_1 = trigger_1
+        self.trigger_2 = trigger_2
+
+    def evaluate(self, story):      # and fires when either or both of the trigger fire
+        return self.trigger_1.evaluate(story) or self.trigger_2.evaluate(story)
 
 
 #======================
@@ -197,10 +217,15 @@ def filter_stories(stories, triggerlist):
 
     Returns: a list of only the stories for which a trigger in triggerlist fires.
     """
-    # TODO: Problem 10
-    # This is a placeholder
-    # (we're just returning all the stories, with no filtering)
-    return stories
+    filtered_stories = []       # create empty list of stories after filter
+    for story in stories:
+        for trigger in triggerlist:
+            if trigger.evaluate(story):     # if any of the trigger in triggerlist triggers, add it to filtered_stories and end the iteration over triggerlist
+                filtered_stories.append(story)
+                break
+            else:
+                continue
+    return filtered_stories
 
 
 

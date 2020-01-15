@@ -1,6 +1,4 @@
-import time
-from datetime import datetime
-a = datetime.now()
-time.sleep(1)
-b = datetime.now()
-print(b - a)
+a = [1, 2, 3]
+b = [4, 5, 6]
+a.remove(1)
+print(a)
