@@ -3,22 +3,25 @@
 // stories!
 
 // title trigger named t1
-t1,TITLE,PlayStation
+t1,TITLE,debate
 
 // description trigger named t2
-t2,DESCRIPTION,appointing
+t2,DESCRIPTION,Trump
 
 // description trigger named t3
 t3,DESCRIPTION,Clinton
 
 // after trigger named t4
-t4,AFTER,3 Oct 2016 17:00:10
+t4,AFTER,3 Sep 2016 18:00:00
+
+// before trigger named t4
+t5,BEFORE,3 Sep 2016 23:00:00
 
 // composite trigger named t4
-t5,AND,t2,t3
+t6,AND,t2,t3
 
 // composite trigger named t4
-t6,AND,t1,t4
+t7,AND,t4,t5
 
 // the trigger list contains t1 and t4
-ADD,t1
+ADD,t6,t7,t1
